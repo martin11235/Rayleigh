@@ -4,9 +4,11 @@
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 import os
-from spack import *
+from spack.package import *
 
 class Rayleigh(MakefilePackage):
+    depends_on("c", type="build")
+    depends_on("fortran", type="build")
     __doc__ = 'Rayleigh is a 3-D convection code designed for the study of dynamo behavior in spherical geometry.'
     homepage = 'https://github.com/geodynamics/Rayleigh'
     url = 'https://github.com/geodynamics/Rayleigh/archive/refs/tags/v1.0.1.tar.gz'
@@ -38,6 +40,7 @@ class Rayleigh(MakefilePackage):
                 args.append('--with-fftw={}'.format(spec['fftw'].prefix))
 
             if spec.satisfies('^openblas'):
+                args.append('--with-blas={}'.format(spec['openblas'].prefix))
                 args.append('--openblas')
             elif not spec.satisfies('^cray-libsci'):
                 args.append('--with-lapack={}'.format(spec['lapack'].prefix))
